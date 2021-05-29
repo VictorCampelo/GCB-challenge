@@ -7,6 +7,7 @@ import { winstonConfig } from './configs/winston.config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerInterceptor } from './interceptors/logger.interceptor';
 import { DoctorModule } from './doctor/doctor.module';
+import { SpecialtyModule } from './specialty/specialty.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DoctorModule } from './doctor/doctor.module';
     DatabaseModule,
     WinstonModule.forRoot(winstonConfig),
     DoctorModule,
+    SpecialtyModule,
   ],
   controllers: [],
   providers: [
