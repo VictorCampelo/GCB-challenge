@@ -18,10 +18,8 @@ export class LoggerInterceptor implements NestInterceptor {
 
   private log(req) {
     const body = { ...req.body };
-    delete body.password;
-    delete body.passwordConfirmation;
-    const user = (req as any).user;
-    const userEmail = user ? user.email : null;
+    const doctor = (req as any).doctor;
+    const doctorName = doctor ? doctor.nome : null;
     this.logger.info({
       timestamp: new Date().toISOString(),
       method: req.method,
@@ -32,7 +30,7 @@ export class LoggerInterceptor implements NestInterceptor {
         params: req.params,
       },
       from: req.ip,
-      madeBy: userEmail,
+      madeBy: doctorName,
     });
   }
 }
