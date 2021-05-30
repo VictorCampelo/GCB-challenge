@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateSpecialtyDto } from './dtos/specialty.create.dto';
 import { Specialty } from './specialty.entity';
@@ -18,7 +23,22 @@ export class SpecialtyService {
    * @returns created specialty
    */
   async create(createSpecialtyDto: CreateSpecialtyDto): Promise<Specialty> {
-    return this.specialtyRepository.create(createSpecialtyDto);
+    const specialty = this.specialtyRepository.create(createSpecialtyDto);
+
+    try {
+      await specialty.save();
+      return specialty;
+    } catch (error) {
+      //E11000 duplicate key error collection
+      if (error.code === 11000) {
+        throw new ConflictException('Especialidade já está em uso');
+      } else {
+        throw new InternalServerErrorException(
+          'Erro ao salvar os dados da especialidade no banco de dados: ' +
+            error,
+        );
+      }
+    }
   }
 
   async findAll(): Promise<Specialty[]> {

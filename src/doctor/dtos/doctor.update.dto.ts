@@ -1,4 +1,5 @@
 import { MaxLength, IsArray, IsNumberString } from 'class-validator';
+import { Specialty } from 'src/specialty/specialty.entity';
 
 export class UpdateDoctorDto {
   @MaxLength(120, {

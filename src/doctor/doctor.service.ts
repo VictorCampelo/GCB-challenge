@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDoctorDto } from './dtos/doctor.create.dto';
 import { Doctor } from './doctor.entity';
@@ -9,6 +9,7 @@ export class DoctorService {
   constructor(
     @InjectRepository(DoctorRepository)
     private doctorRepository: DoctorRepository,
+    private httpService: HttpService,
   ) {}
 
   /**
@@ -17,6 +18,18 @@ export class DoctorService {
    * @returns created doctor
    */
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
-    return this.doctorRepository.createDoctor(createDoctorDto);
+    const address = await this.getLocationByCep(createDoctorDto.cep);
+    return this.doctorRepository.createDoctor(createDoctorDto, address);
+  }
+
+  private async getLocationByCep(cep: string) {
+    return await this.httpService
+      .get(`https://viacep.com.br/ws/${cep}/json`)
+      .toPromise()
+      .then((res) => res.data)
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
   }
 }

@@ -18,12 +18,12 @@ import {
 import { UpdateSpecialtyDto } from './dtos/specialty.update.dto';
 
 @ApiTags('Specialty')
-@Controller('specialtys')
+@Controller('specialties')
 export class SpecialtyController {
   constructor(private specialtyService: SpecialtyService) {}
 
   /**
-   * Posts specialtys controller
+   * Posts specialties controller
    * @param createSpecialtyDto
    * @returns created specialty
    */

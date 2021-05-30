@@ -1,21 +1,23 @@
 import {
   ConflictException,
   InternalServerErrorException,
-  HttpService,
 } from '@nestjs/common';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, getRepository, In, Repository } from 'typeorm';
 import { CreateDoctorDto } from './dtos/doctor.create.dto';
 import { Doctor } from './doctor.entity';
+import { Specialty } from 'src/specialty/specialty.entity';
 
 @EntityRepository(Doctor)
 export class DoctorRepository extends Repository<Doctor> {
-  private httpService: HttpService;
   /**
    * Creates doctor
    * @param createDoctorDto
    * @returns doctor
    */
-  async createDoctor(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
+  async createDoctor(
+    createDoctorDto: CreateDoctorDto,
+    address: any,
+  ): Promise<Doctor> {
     const { nome, crm, telefone_fixo, telefone_celular, especialidade, cep } =
       createDoctorDto;
 
@@ -29,7 +31,11 @@ export class DoctorRepository extends Repository<Doctor> {
       gia,
       ddd,
       siafi,
-    } = await this.getLocationByCep(cep);
+    } = address;
+
+    const specialtys = await getRepository(Specialty).find({
+      where: { nome: In(especialidade) },
+    });
 
     const doctor = this.create();
 
@@ -47,7 +53,7 @@ export class DoctorRepository extends Repository<Doctor> {
     doctor.gia = gia;
     doctor.ddd = ddd;
     doctor.siafi = siafi;
-    doctor.especialidade = especialidade;
+    doctor.especialidades = specialtys;
 
     try {
       await doctor.save();
@@ -62,16 +68,5 @@ export class DoctorRepository extends Repository<Doctor> {
         );
       }
     }
-  }
-
-  async getLocationByCep(cep: string) {
-    return await this.httpService
-      .get(`https://viacep.com.br/ws/${cep}/json`)
-      .toPromise()
-      .then((res) => res.data)
-      .catch((err) => {
-        console.log(err);
-        throw err;
-      });
   }
 }

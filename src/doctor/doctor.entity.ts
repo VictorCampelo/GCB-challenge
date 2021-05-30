@@ -4,10 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Specialty } from './../specialty/specialty.entity';
 
 @Entity('doctor')
 @Unique(['id', 'crm'])
@@ -62,9 +65,9 @@ export class Doctor extends BaseEntity {
   @Column({ nullable: true, type: 'varchar' })
   siafi: string;
 
-  // Especialidade médica (mínimo de duas especialidades)
-  @Column('simple-array')
-  especialidade: string[];
+  @ManyToMany(() => Specialty)
+  @JoinTable()
+  especialidades: Specialty[];
 
   @CreateDateColumn()
   @Exclude({ toPlainOnly: true })
