@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -76,4 +77,8 @@ export class Doctor extends BaseEntity {
   @UpdateDateColumn()
   @Exclude({ toPlainOnly: true })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @Exclude({ toPlainOnly: true })
+  deletedAt?: Date;
 }
