@@ -241,13 +241,16 @@ export class DoctorRepository extends Repository<Doctor> {
       }
     }
     if (queryDto.especialidades) {
+      console.log(queryDto.especialidades);
       queryDto.especialidades.forEach((element) => {
         if (flag) {
           query.andWhere('especialidade.nome ILIKE :nome', {
             nome: `%${element}%`,
           });
         } else {
-          query.where('doctor.crm ILIKE :crm', { crm: `%${element}%` });
+          query.where('especialidade.nome ILIKE :nome', {
+            nome: `%${element}%`,
+          });
           flag = true;
         }
       });

@@ -3,6 +3,7 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumberString,
+  IsOptional,
   MaxLength,
 } from 'class-validator';
 
@@ -32,6 +33,7 @@ export class CreateDoctorDto {
   })
   telefone_fixo: string;
 
+  @IsOptional()
   @IsNumberString({ no_symbols: true })
   @MaxLength(13, {
     message: 'O número do celular do médico deve conter até 13 dígitos',

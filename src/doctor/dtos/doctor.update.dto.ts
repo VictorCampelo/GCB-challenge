@@ -38,8 +38,4 @@ export class UpdateDoctorDto {
     message: 'O CEP do médico deve conter até 8 dígitos',
   })
   cep: string;
-
-  @IsOptional()
-  @IsArray()
-  especialidade: string[];
 }

@@ -1,5 +1,7 @@
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Specialty } from 'src/specialty/specialty.entity';
+import { Repository } from 'typeorm';
 import { Doctor } from './doctor.entity';
 import { DoctorRepository } from './doctor.repository';
 import { CreateDoctorDto } from './dtos/doctor.create.dto';
@@ -13,6 +15,8 @@ export class DoctorService {
   constructor(
     @InjectRepository(DoctorRepository)
     private doctorRepository: DoctorRepository,
+    // @InjectRepository(Specialty)
+    // private specialtyRepository: Repository<Specialty>,
     private httpService: HttpService,
   ) {}
 
@@ -88,6 +92,77 @@ export class DoctorService {
     } catch (error) {
       throw new NotFoundException(`Doctor not found. Details: ${error}`);
     }
+  }
+
+  /**
+   * Adds specialties
+   * @param id
+   * @param specialties
+   * @returns message
+   */
+  async addSpecialties(
+    id: string,
+    specialties: Specialty[],
+  ): Promise<{ message: string }> {
+    // let specialtyList;
+    // try {
+    //   specialtyList = await this.specialtyRepository
+    //     .createQueryBuilder('specialty')
+    //     .where('specialty.nome IN (:...names)', { names: specialties })
+    //     .getMany();
+    // } catch (error) {
+    //   throw new NotFoundException(`Specialties not found. Details: ${error}`);
+    // }
+    let doctor;
+    try {
+      doctor = await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
+    } catch (error) {
+      throw new NotFoundException(`Doctor not found. Details: ${error}`);
+    }
+    specialties.forEach((element) => {
+      doctor.especialidades.push(element);
+    });
+
+    doctor.save();
+
+    return { message: 'successfully added new specialties' };
+  }
+
+  /**
+   * Removes specialties
+   * @param id
+   * @param specialties
+   * @returns message
+   */
+  async removeSpecialties(id: string, specialties: Specialty[]) {
+    // let specialtyList;
+    // try {
+    //   specialtyList = await this.specialtyRepository
+    //     .createQueryBuilder('specialty')
+    //     .where('specialty.nome IN (:...names)', { names: specialties })
+    //     .getMany();
+    // } catch (error) {
+    //   throw new NotFoundException(`Specialties not found. Details: ${error}`);
+    // }
+    let doctor;
+    try {
+      doctor = await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
+    } catch (error) {
+      throw new NotFoundException(`Doctor not found. Details: ${error}`);
+    }
+    specialties.forEach((element) => {
+      doctor.especialidades = doctor.especialidades.filter((specialty) => {
+        return specialty.nome !== element.nome;
+      });
+    });
+
+    doctor.save();
+
+    return { message: 'successfully removed specialties' };
   }
 
   /**

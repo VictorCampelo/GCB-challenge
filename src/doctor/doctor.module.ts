@@ -1,5 +1,7 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Specialty } from 'src/specialty/specialty.entity';
+import { SpecialtyService } from 'src/specialty/specialty.service';
 import { DoctorController } from './doctor.controller';
 import { DoctorRepository } from './doctor.repository';
 import { DoctorService } from './doctor.service';
@@ -12,9 +14,9 @@ import { DoctorService } from './doctor.service';
         maxRedirects: 5,
       }),
     }),
-    TypeOrmModule.forFeature([DoctorRepository]),
+    TypeOrmModule.forFeature([DoctorRepository, Specialty]),
   ],
-  providers: [DoctorService],
+  providers: [DoctorService, SpecialtyService],
   controllers: [DoctorController],
 })
 export class DoctorModule {}

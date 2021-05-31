@@ -13,14 +13,20 @@ import {
   Get,
   Param,
   Put,
+  Query,
+  Delete,
 } from '@nestjs/common';
 import { UpdateDoctorDto } from './dtos/doctor.update.dto';
 import { FindDoctorDto } from './dtos/doctor.find.dto';
+import { SpecialtyService } from 'src/specialty/specialty.service';
 
 @ApiTags('Doctor')
 @Controller('doctors')
 export class DoctorController {
-  constructor(private doctorService: DoctorService) {}
+  constructor(
+    private specialtyService: SpecialtyService,
+    private doctorService: DoctorService,
+  ) {}
 
   /**
    * Posts doctors controller
@@ -49,16 +55,16 @@ export class DoctorController {
     return await this.doctorService.findDoctor(id);
   }
 
-  /**
-   * Gets all doctors controller
-   * @returns doctors
-   */
-  @Get('/')
-  @UseInterceptors(ClassSerializerInterceptor)
-  @HttpCode(200)
-  async findallDoctors(): Promise<Doctor[]> {
-    return await this.doctorService.findAll();
-  }
+  // /**
+  //  * Gets all doctors controller
+  //  * @returns doctors
+  //  */
+  // @Get('/')
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @HttpCode(200)
+  // async findallDoctors(): Promise<Doctor[]> {
+  //   return await this.doctorService.findAll();
+  // }
 
   /**
    * Gets all doctors controller
@@ -68,8 +74,7 @@ export class DoctorController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(200)
   async findallDoctorsByAttr(
-    @Body(new ValidationPipe({ transform: true }))
-    findDoctorDto: FindDoctorDto,
+    @Query() findDoctorDto: FindDoctorDto,
   ): Promise<Doctor[]> {
     return await this.doctorService.findDoctorAttr(findDoctorDto);
   }
@@ -88,5 +93,45 @@ export class DoctorController {
     @Body(ValidationPipe) updateDoctorDto: UpdateDoctorDto,
   ) {
     return await this.doctorService.update(id, updateDoctorDto);
+  }
+
+  @Delete('/delete/:id')
+  @HttpCode(200)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async deleteDoctor(@Param('id') id: string) {
+    return await this.doctorService.delete(id);
+  }
+
+  @Post('/restore/:id')
+  @HttpCode(200)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async retoreDoctor(@Param('id') id: string) {
+    return await this.doctorService.restore(id);
+  }
+
+  @Post('/add-specialties/:id')
+  @HttpCode(201)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async addSpecialties(
+    @Param('id') id: string,
+    @Body(ValidationPipe) specialties: string[],
+  ) {
+    const specialtyList = await this.specialtyService.findSpecialtybyName(
+      specialties,
+    );
+    return await this.doctorService.addSpecialties(id, specialtyList);
+  }
+
+  @Delete('/remove-specialties/:id')
+  @HttpCode(201)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async removeSpecialties(
+    @Param('id') id: string,
+    @Body(ValidationPipe) specialties: string[],
+  ) {
+    const specialtyList = await this.specialtyService.findSpecialtybyName(
+      specialties,
+    );
+    return await this.doctorService.removeSpecialties(id, specialtyList);
   }
 }
