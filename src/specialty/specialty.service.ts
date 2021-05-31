@@ -30,7 +30,8 @@ export class SpecialtyService {
       return specialty;
     } catch (error) {
       //E11000 duplicate key error collection
-      if (error.code === 11000) {
+      console.log(error.code);
+      if (error.code === '23505') {
         throw new ConflictException('Especialidade já está em uso');
       } else {
         throw new InternalServerErrorException(
@@ -51,6 +52,19 @@ export class SpecialtyService {
     if (!specialty) throw new NotFoundException('Especialidade não encontrado');
 
     return specialty;
+  }
+
+  async findSpecialtybyName(specialties: string[]): Promise<Specialty[]> {
+    let specialtyList;
+    try {
+      specialtyList = await this.specialtyRepository
+        .createQueryBuilder('specialty')
+        .where('specialty.nome IN (:...names)', { names: specialties })
+        .getMany();
+    } catch (error) {
+      throw new NotFoundException(`Specialties not found. Details: ${error}`);
+    }
+    return specialtyList;
   }
 
   async update(
