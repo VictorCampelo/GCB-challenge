@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: function (configService: ConfigService): {} {
+      useFactory: function (configService: ConfigService) {
         return {
           type: 'postgres',
           host: configService.get('TYPEORM_HOST'),
