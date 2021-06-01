@@ -20,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           cli: {
             migrationsDir: __dirname + '/migration/',
           },
+          migrationsRun: true,
           synchronize: true,
         };
       },
