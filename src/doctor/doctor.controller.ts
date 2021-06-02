@@ -55,17 +55,6 @@ export class DoctorController {
     return await this.doctorService.findDoctor(id);
   }
 
-  // /**
-  //  * Gets all doctors controller
-  //  * @returns doctors
-  //  */
-  // @Get('/')
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @HttpCode(200)
-  // async findallDoctors(): Promise<Doctor[]> {
-  //   return await this.doctorService.findAll();
-  // }
-
   /**
    * Gets all doctors controller
    * @returns doctors
