@@ -3,34 +3,36 @@ import { IsNumberString, IsOptional, MaxLength } from 'class-validator';
 export class UpdateDoctorDto {
   @IsOptional()
   @MaxLength(120, {
-    message: 'O nome do médico deve conter até 120 caracteres',
+    message: "The doctor's name must be up to 120 characters",
   })
   nome: string;
 
+  @IsNumberString({ no_symbols: true })
   @IsOptional()
   @MaxLength(7, {
-    message: 'O CRM do médico deve conter até 7 caracteres',
+    message: "The doctor's CRM must contain up to 7 characters",
   })
   crm: string;
 
   @IsOptional()
   @IsNumberString({ no_symbols: true })
   @MaxLength(13, {
-    message: 'O número fixo do médico deve conter até 13 dígitos',
+    message: "The doctor's fixed number must contain up to 13 digits",
   })
   telefone_fixo: string;
 
   @IsOptional()
   @IsNumberString({ no_symbols: true })
   @MaxLength(13, {
-    message: 'O número do celular do médico deve conter até 13 dígitos',
+    message:
+      'The mobile phone number of the doctor must contain up to 13 digits',
   })
   telefone_celular: string;
 
   @IsOptional()
   @IsNumberString({ no_symbols: true })
   @MaxLength(8, {
-    message: 'O CEP do médico deve conter até 8 dígitos',
+    message: "The doctor's CEP code must contain up to 8 digits",
   })
   cep: string;
 

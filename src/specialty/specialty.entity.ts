@@ -16,7 +16,6 @@ export class Specialty extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // Nome da especialidade
   @Column({ nullable: false, type: 'varchar', length: 255, unique: true })
   nome: string;
 

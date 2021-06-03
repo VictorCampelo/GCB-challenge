@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateSpecialtyDto } from './dtos/specialty.create.dto';
-import { Specialty } from './specialty.entity';
 import { Repository } from 'typeorm';
+import { CreateSpecialtyDto } from './dtos/specialty.create.dto';
+import { FindSpecialtyDto } from './dtos/specialty.find.dto';
 import { UpdateSpecialtyDto } from './dtos/specialty.update.dto';
-import { AddSpecialtiesDto } from 'src/doctor/dtos/doctor.add-specialties.dto';
+import { Specialty } from './specialty.entity';
 
 @Injectable()
 export class SpecialtyService {
@@ -24,54 +24,86 @@ export class SpecialtyService {
    * @returns created specialty
    */
   async create(createSpecialtyDto: CreateSpecialtyDto): Promise<Specialty> {
-    const specialty = this.specialtyRepository.create(createSpecialtyDto);
+    let specialty;
+    try {
+      specialty = this.specialtyRepository.create(createSpecialtyDto);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
 
     try {
       await specialty.save();
       return specialty;
     } catch (error) {
-      //E11000 duplicate key error collection
-      console.log(error.code);
       if (error.code === '23505') {
-        throw new ConflictException('Especialidade já está em uso');
+        throw new ConflictException('Specialty is already registered');
       } else {
-        throw new InternalServerErrorException(
-          'Erro ao salvar os dados da especialidade no banco de dados: ' +
-            error,
-        );
+        throw new InternalServerErrorException(error);
       }
     }
   }
 
+  /**
+   * Finds all
+   * @returns list of all specialties
+   */
   async findAll(): Promise<Specialty[]> {
-    return await this.specialtyRepository.find();
+    let specialties;
+    try {
+      specialties = await this.specialtyRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+
+    if (!specialties) throw new NotFoundException('Specialties not found');
+
+    return specialties;
   }
 
+  /**
+   * Finds specialty by id
+   * @param id
+   * @returns specialty by id
+   */
   async findSpecialtyById(id: string): Promise<Specialty> {
-    const specialty = await this.specialtyRepository.findOne(id);
+    let specialty;
+    try {
+      specialty = await this.specialtyRepository.findOne(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
 
-    if (!specialty) throw new NotFoundException('Especialidade não encontrado');
+    if (!specialty) throw new NotFoundException('Specialty not found');
 
     return specialty;
   }
 
+  /**
+   * Finds specialties by name
+   * @param findSpecialtyDto
+   * @returns specialties by name
+   */
   async findSpecialtybyName(
-    addSpecialtiesDto: AddSpecialtiesDto,
+    findSpecialtyDto: FindSpecialtyDto,
   ): Promise<Specialty[]> {
-    let specialtyList;
     try {
-      specialtyList = await this.specialtyRepository
+      return await this.specialtyRepository
         .createQueryBuilder('specialty')
-        .where('specialty.nome IN (:...names)', {
-          names: addSpecialtiesDto.especialidades,
+        .where('specialty.nome ILIKE ANY(ARRAY[:...names])', {
+          names: findSpecialtyDto.especialidades,
         })
         .getMany();
     } catch (error) {
       throw new NotFoundException(`Specialties not found. Details: ${error}`);
     }
-    return specialtyList;
   }
 
+  /**
+   * Updates specialty service
+   * @param id
+   * @param updateSpecialtyDto
+   * @returns Specialty
+   */
   async update(
     id: string,
     updateSpecialtyDto: UpdateSpecialtyDto,
@@ -84,16 +116,21 @@ export class SpecialtyService {
       const specialty = await this.findSpecialtyById(id);
       return specialty;
     } else {
-      throw new NotFoundException('Usuário não encontrado');
+      throw new NotFoundException('Specialty not found');
     }
   }
 
+  /**
+   * Deletes specialty service
+   * @param id
+   * @returns message
+   */
   async delete(id: string): Promise<{ message: string }> {
     const result = await this.specialtyRepository.softDelete(id);
     if (result.affected > 0) {
-      return { message: 'Especialidade Removida temporariamente' };
+      return { message: 'Specialty Temporarily Removed' };
     } else {
-      throw new NotFoundException('Usuário não encontrado');
+      throw new NotFoundException('Specialty not found');
     }
   }
 }
