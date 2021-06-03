@@ -2,10 +2,10 @@ import { IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateSpecialtyDto {
   @IsNotEmpty({
-    message: 'Por favor, adicione o nome da especialidade.',
+    message: 'Please add the name of the specialty.',
   })
   @MaxLength(255, {
-    message: 'O nome da especialidade deve conter até 255 caracteres',
+    message: 'The specialty name must contain up to 255 characters.',
   })
   nome: string;
 }
