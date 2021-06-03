@@ -1,3 +1,5 @@
+![Logo](https://static.gcbinvestimentos.com/gcb-investimentos/imagem/logo/logo-clara.png)
+
 # **Desafio backend - Grupo GCB**
 
 O Grupo GCB é uma holding especializada no mercado financeiro e de capitais, com foco nos segmentos de seguros, investimentos, securitização e consultoria financeira para empresas e pessoas físicas.
@@ -291,3 +293,9 @@ DELETE ​/specialties/delete/{id}
 | Parâmetro | Tipo     | Descrição                                   |
 | :-------- | :------- | :------------------------------------------ |
 | `id`      | `string` | **Exigido**. Id da Especialidade cadastrada |
+
+<br />
+
+## Autor
+
+- [@victorcampelo](https://www.github.com/victorcampelo)
