@@ -9,6 +9,7 @@ import { CreateSpecialtyDto } from './dtos/specialty.create.dto';
 import { Specialty } from './specialty.entity';
 import { Repository } from 'typeorm';
 import { UpdateSpecialtyDto } from './dtos/specialty.update.dto';
+import { AddSpecialtiesDto } from 'src/doctor/dtos/doctor.add-specialties.dto';
 
 @Injectable()
 export class SpecialtyService {
@@ -54,12 +55,16 @@ export class SpecialtyService {
     return specialty;
   }
 
-  async findSpecialtybyName(specialties: string[]): Promise<Specialty[]> {
+  async findSpecialtybyName(
+    addSpecialtiesDto: AddSpecialtiesDto,
+  ): Promise<Specialty[]> {
     let specialtyList;
     try {
       specialtyList = await this.specialtyRepository
         .createQueryBuilder('specialty')
-        .where('specialty.nome IN (:...names)', { names: specialties })
+        .where('specialty.nome IN (:...names)', {
+          names: addSpecialtiesDto.especialidades,
+        })
         .getMany();
     } catch (error) {
       throw new NotFoundException(`Specialties not found. Details: ${error}`);

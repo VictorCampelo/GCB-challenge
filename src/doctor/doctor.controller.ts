@@ -19,6 +19,7 @@ import {
 import { UpdateDoctorDto } from './dtos/doctor.update.dto';
 import { FindDoctorDto } from './dtos/doctor.find.dto';
 import { SpecialtyService } from 'src/specialty/specialty.service';
+import { AddSpecialtiesDto } from './dtos/doctor.add-specialties.dto';
 
 @ApiTags('Doctor')
 @Controller('doctors')
@@ -103,7 +104,7 @@ export class DoctorController {
   @UseInterceptors(ClassSerializerInterceptor)
   async addSpecialties(
     @Param('id') id: string,
-    @Body(ValidationPipe) specialties: string[],
+    @Body(ValidationPipe) specialties: AddSpecialtiesDto,
   ) {
     const specialtyList = await this.specialtyService.findSpecialtybyName(
       specialties,
@@ -116,7 +117,7 @@ export class DoctorController {
   @UseInterceptors(ClassSerializerInterceptor)
   async removeSpecialties(
     @Param('id') id: string,
-    @Body(ValidationPipe) specialties: string[],
+    @Body(ValidationPipe) specialties: AddSpecialtiesDto,
   ) {
     const specialtyList = await this.specialtyService.findSpecialtybyName(
       specialties,
