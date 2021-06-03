@@ -241,7 +241,6 @@ export class DoctorRepository extends Repository<Doctor> {
       }
     }
     if (queryDto.especialidades) {
-      console.log(queryDto.especialidades);
       const listSpecialties = [];
 
       try {
@@ -251,8 +250,6 @@ export class DoctorRepository extends Repository<Doctor> {
       } catch (error) {
         listSpecialties.push('%' + queryDto.especialidades + '%');
       }
-
-      console.log(queryDto.especialidades.length);
 
       if (flag) {
         query.andWhere('especialidade.nome ILIKE ANY(ARRAY[:...nomes])', {

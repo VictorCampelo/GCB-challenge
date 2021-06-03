@@ -1,9 +1,4 @@
-import {
-  IsArray,
-  IsNumberString,
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
+import { IsNumberString, IsOptional, MaxLength } from 'class-validator';
 
 export class UpdateDoctorDto {
   @IsOptional()
@@ -38,4 +33,31 @@ export class UpdateDoctorDto {
     message: 'O CEP do médico deve conter até 8 dígitos',
   })
   cep: string;
+
+  @IsOptional()
+  logradouro: string;
+
+  @IsOptional()
+  complemento: string;
+
+  @IsOptional()
+  bairro: string;
+
+  @IsOptional()
+  cidade: string;
+
+  @IsOptional()
+  estado: string;
+
+  @IsOptional()
+  ibge: string;
+
+  @IsOptional()
+  gia: string;
+
+  @IsOptional()
+  ddd: string;
+
+  @IsOptional()
+  siafi: string;
 }

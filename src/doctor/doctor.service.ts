@@ -1,8 +1,6 @@
-import { options } from '@hapi/joi';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Specialty } from 'src/specialty/specialty.entity';
-import { Repository } from 'typeorm';
 import { Doctor } from './doctor.entity';
 import { DoctorRepository } from './doctor.repository';
 import { CreateDoctorDto } from './dtos/doctor.create.dto';
@@ -64,7 +62,33 @@ export class DoctorService {
    * @returns updated doctor
    */
   async update(id: string, updateDoctorDto: UpdateDoctorDto) {
-    return this.doctorRepository.update(id, updateDoctorDto);
+    if (updateDoctorDto.cep) {
+      const address = await this.getLocationByCep(updateDoctorDto.cep);
+
+      const {
+        logradouro,
+        complemento,
+        bairro,
+        localidade,
+        uf,
+        ibge,
+        gia,
+        ddd,
+        siafi,
+      } = address;
+
+      updateDoctorDto.logradouro = logradouro;
+      updateDoctorDto.complemento = complemento;
+      updateDoctorDto.bairro = bairro;
+      updateDoctorDto.cidade = localidade;
+      updateDoctorDto.estado = uf;
+      updateDoctorDto.ibge = ibge;
+      updateDoctorDto.gia = gia;
+      updateDoctorDto.ddd = ddd;
+      updateDoctorDto.siafi = siafi;
+
+      return this.doctorRepository.update(id, updateDoctorDto);
+    }
   }
 
   /**
@@ -105,15 +129,6 @@ export class DoctorService {
     id: string,
     specialties: Specialty[],
   ): Promise<{ message: string }> {
-    // let specialtyList;
-    // try {
-    //   specialtyList = await this.specialtyRepository
-    //     .createQueryBuilder('specialty')
-    //     .where('specialty.nome IN (:...names)', { names: specialties })
-    //     .getMany();
-    // } catch (error) {
-    //   throw new NotFoundException(`Specialties not found. Details: ${error}`);
-    // }
     let doctor;
     try {
       doctor = await this.doctorRepository.findOne(id, {
