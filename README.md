@@ -1,6 +1,36 @@
-![Logo](https://static.gcbinvestimentos.com/gcb-investimentos/imagem/logo/logo-clara.png)
+<h1 align="center">
+<a href="#" alt="site do ecoleta"> Desafio Backend do Grupo GCB </a>
+</h1>
+<h3 align="center">
+    Desafio para desenvolvedor back-end na empresa GCB
+</h3>
 
-# **Desafio backend - Grupo GCB**
+<br />
+
+<p align="center">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/VictorCampelo/GCB-challenge?color=%2304D361">
+
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/VictorCampelo/GCB-challenge">
+
+  <!-- <a href="https://www.twitter.com/tgmarinho/">
+    <img alt="Siga no Twitter" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Ftgmarinho%2FREADME-ecoleta">
+  </a> -->
+
+  <a href="https://github.com/VictorCampelo/GCB-challenge/commits/master">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/VictorCampelo/GCB-challenge">
+  </a>
+    
+   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
+ 
+</p>
+
+---
+
+<p align="center">
+<img alt="logo" src="https://static.gcbinvestimentos.com/gcb-investimentos/imagem/logo/logo-clara.png">
+</p>
+
+# **Sobre o grupo GCB**
 
 O Grupo GCB é uma holding especializada no mercado financeiro e de capitais, com foco nos segmentos de seguros, investimentos, securitização e consultoria financeira para empresas e pessoas físicas.
 
@@ -13,9 +43,15 @@ Fundada e administrada por sócios empreendedores, com conhecimentos complementa
 - https://www.grcbcapital.com.br
 - https://adiante.app
 
+[Fonte](https://www.linkedin.com/company/grupo-gcb/about/)
+
+---
+
+# 📝 **Sobre o desafio backend**
+
 O desafio é construir uma API Rest que faça a gestão de cadastros de médicos. 🏥
 
-## **Instalação**
+# 🛠 **Instalação**
 
 Copie o arquivo `.env.example` para o `.env`.
 
@@ -34,6 +70,10 @@ $ npm install
 ```
 
 Feito isso, edite os valores das variáveis de ambiente para os valores desejados.
+
+---
+
+# ⚙️ **Executar localmente**
 
 ## **Executar a aplicação e banco de dados dentro do Docker**
 
@@ -75,9 +115,13 @@ $ (npm run | yarn) start:dev
 $ (npm run | yarn) start:prod
 ```
 
-# **REST API**
+---
+
+# 🚀 **REST API**
 
 A especificação da REST API para o desafio proposto está descrita abaixo:
+
+---
 
 ## **Documentação**
 
@@ -87,9 +131,11 @@ A especificação da REST API para o desafio proposto está descrita abaixo:
 
   - `http://localhost:3000/api`
 
-# **MÉDICO**
+---
 
-## **Cadastrar um médico**
+## **MÉDICO**
+
+### **Cadastrar um médico**
 
 ```http
 POST /doctors/create
@@ -112,7 +158,9 @@ POST /doctors/create
 
 <br />
 
-## **Obter médico pelo ID**
+---
+
+### **Obter médico pelo ID**
 
 ```http
 GET /doctors/{id}
@@ -124,7 +172,9 @@ GET /doctors/{id}
 
 <br />
 
-## **Obter lista de médicos cadastrados utilizando qualquer atributo do médico como parâmetro**
+---
+
+### **Obter lista de médicos cadastrados utilizando qualquer atributo do médico como parâmetro**
 
 ```http
 GET /doctors
@@ -151,7 +201,9 @@ GET /doctors
 
 <br />
 
-## **Atualizar informações do médico**
+---
+
+### **Atualizar informações do médico**
 
 ```http
 PUT /doctor/edit​/{id}
@@ -182,7 +234,9 @@ PUT /doctor/edit​/{id}
 
 <br />
 
-## **Remover um médico temporariamente**
+---
+
+### **Remover um médico temporariamente**
 
 ```http
 DELETE /doctor/delete/{id}
@@ -194,7 +248,9 @@ DELETE /doctor/delete/{id}
 
 <br />
 
-## **Recuperar um médico temporariamente deletado**
+---
+
+### **Recuperar um médico temporariamente deletado**
 
 ```http
 POST /doctor/restore/{id}
@@ -206,7 +262,9 @@ POST /doctor/restore/{id}
 
 <br />
 
-## **Adicionar especialidades a um médico**
+---
+
+### **Adicionar especialidades a um médico**
 
 ```http
 POST /doctor/add-specialties/{id}
@@ -224,7 +282,9 @@ POST /doctor/add-specialties/{id}
 
 <br />
 
-## **Remover especialidades um médico**
+---
+
+### **Remover especialidades um médico**
 
 ```http
 POST /doctor/remove-specialties/{id}
@@ -240,11 +300,13 @@ POST /doctor/remove-specialties/{id}
 | :--------------- | :--------- | :---------------------------------------------------------- |
 | `especialidades` | `string[]` | **Exigido**. Lista especialidades a ser adionadas ao médico |
 
-<br /><br />
+<br />
 
-# ESPECIALIDADE
+---
 
-## **Cadastrar uma especialidade**
+## **ESPECIALIDADE**
+
+### **Cadastrar uma especialidade**
 
 ```http
 POST /specialties/create
@@ -256,7 +318,9 @@ POST /specialties/create
 
 <br />
 
-## **Obter lista de todas especialidades cadastradas**
+---
+
+### **Obter lista de todas especialidades cadastradas**
 
 ```http
 GET /specialties
@@ -266,7 +330,9 @@ Sem parâmetros exigidos
 
 <br />
 
-## **Atualizar informações de uma especialidade**
+---
+
+### **Atualizar informações de uma especialidade**
 
 ```http
 PUT /specialties/edit​/{id}
@@ -284,7 +350,9 @@ PUT /specialties/edit​/{id}
 
 <br />
 
-## **Remover uma especialidade temporariamente**
+---
+
+### **Remover uma especialidade temporariamente**
 
 ```http
 DELETE ​/specialties/delete/{id}
@@ -294,8 +362,32 @@ DELETE ​/specialties/delete/{id}
 | :-------- | :------- | :------------------------------------------ |
 | `id`      | `string` | **Exigido**. Id da Especialidade cadastrada |
 
-<br />
+---
 
-## Autor
+## 🦸 **Desenvolvedor**
 
-- [@victorcampelo](https://www.github.com/victorcampelo)
+<p align="center">
+<a href="">
+ <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/43244294?v=4" width="100px;" alt=""/>
+ <br />
+ <sub><b>Victor Campelo</b></sub>
+ <br />
+ <br />
+ <a href="https://www.instagram.com/victor_campelo_/">
+ <img src="https://img.shields.io/badge/-@victor_campelo_-993399?style=flat-square&labelColor=993399&logo=instagram&logoColor=white&link=https://www.instagram.com/victor_campelo_/" alt="https://www.instagram.com/victor_campelo_/"/>
+ </a>
+ <a href="https://www.linkedin.com/in/victor-campelo/">
+ <img src="https://img.shields.io/badge/-VictorCampelo-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/victor-campelo/" alt="https://www.linkedin.com/in/victor-campelo/"/>
+ </a>
+ <a href="mailto:victor_campelo@outlook.com">
+ <img src="https://img.shields.io/badge/-victor_campelo@outlook.com-c14438?style=flat-square&logo=Microsoft&logoColor=white&link=mailto:victor_campelo@outlook.com" alt="mailto:victor_campelo@outlook.com"/>
+ </a>
+</p>
+
+---
+
+## 📝 **Licença**
+
+Este projeto esta sobe a licença [MIT](./LICENSE).
+
+Feito com ❤️ por Victor Campelo 👋🏽 [Entre em contato!](https://www.linkedin.com/in/victor-campelo/)
