@@ -20,7 +20,7 @@
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/VictorCampelo/GCB-challenge">
   </a>
     
-   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
+   <img alt="License" src="https://img.shields.io/badge/license-GNU-brightgreen">
  
 </p>
 
@@ -388,6 +388,6 @@ DELETE ​/specialties/delete/{id}
 
 ## 📝 **Licença**
 
-Este projeto esta sobe a licença [MIT](./LICENSE).
+Este projeto esta sobe a licença [GNU Lesser General Public 3.0](./LICENSE).
 
 Feito com ❤️ por Victor Campelo 👋🏽 [Entre em contato!](https://www.linkedin.com/in/victor-campelo/)
