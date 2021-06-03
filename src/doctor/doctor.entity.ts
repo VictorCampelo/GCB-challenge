@@ -23,19 +23,19 @@ export class Doctor extends BaseEntity {
   @Column({ nullable: false, type: 'varchar', length: 120 })
   nome: string;
 
-  //CRM: somente números com no máximo 7 caracteres
+  //only numbers
   @Column({ nullable: false, type: 'varchar', length: 7 })
   crm: string;
 
-  //Telefone fixo: somente números
+  //only numbers
   @Column({ nullable: false, type: 'varchar', length: 13 })
   telefone_fixo: string;
 
-  // Telefone celular: somente números
+  //only numbers
   @Column({ nullable: true, type: 'varchar', length: 13 })
   telefone_celular: string;
 
-  // cep: somente números
+  //only numbers
   @Column({ nullable: false, type: 'varchar', length: 8 })
   cep: string;
 

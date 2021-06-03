@@ -60,18 +60,20 @@ export class DoctorRepository extends Repository<Doctor> {
       await doctor.save();
       return doctor;
     } catch (error) {
-      //E11000 duplicate key error collection
       if (error.code === 11000) {
-        throw new ConflictException('CRM já está em uso');
+        throw new ConflictException('CRM is already in use');
       } else {
-        throw new InternalServerErrorException(
-          'Erro ao salvar os dados do médico no banco de dados: ' + error,
-        );
+        throw new InternalServerErrorException(error);
       }
     }
   }
 
-  async findDoctors(queryDto: FindDoctorDto): Promise<Doctor[]> {
+  /**
+   * Find doctors
+   * @param findDoctorDto
+   * @returns list of doctors
+   */
+  async findDoctors(findDoctorDto: FindDoctorDto): Promise<Doctor[]> {
     const query = this.createQueryBuilder('doctor');
 
     query.leftJoinAndSelect('doctor.especialidades', 'especialidade');
@@ -95,160 +97,182 @@ export class DoctorRepository extends Repository<Doctor> {
       'especialidade.nome',
     ]);
 
+    this.queryBuilder(findDoctorDto, query);
+
+    try {
+      return await query.getMany();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  private queryBuilder(findDoctorDto: FindDoctorDto, query) {
     let flag = false;
 
-    if (queryDto.nome) {
-      query.where('doctor.nome ILIKE :nome', { nome: `%${queryDto.nome}%` });
+    if (findDoctorDto.nome) {
+      query.where('doctor.nome ILIKE :nome', {
+        nome: `%${findDoctorDto.nome}%`,
+      });
       flag = true;
     }
-    if (queryDto.crm) {
+    if (findDoctorDto.crm) {
       if (flag) {
-        query.andWhere('doctor.crm ILIKE :crm', { crm: `%${queryDto.crm}%` });
+        query.andWhere('doctor.crm ILIKE :crm', {
+          crm: `%${findDoctorDto.crm}%`,
+        });
       } else {
-        query.where('doctor.crm ILIKE :crm', { crm: `%${queryDto.crm}%` });
+        query.where('doctor.crm ILIKE :crm', { crm: `%${findDoctorDto.crm}%` });
         flag = true;
       }
     }
 
-    if (queryDto.cep) {
+    if (findDoctorDto.cep) {
       if (flag) {
-        query.andWhere('doctor.cep ILIKE :cep', { cep: `%${queryDto.cep}%` });
+        query.andWhere('doctor.cep ILIKE :cep', {
+          cep: `%${findDoctorDto.cep}%`,
+        });
       } else {
-        query.where('doctor.cep ILIKE :cep', { cep: `%${queryDto.cep}%` });
+        query.where('doctor.cep ILIKE :cep', { cep: `%${findDoctorDto.cep}%` });
         flag = true;
       }
     }
-    if (queryDto.telefone_fixo) {
+    if (findDoctorDto.telefone_fixo) {
       if (flag) {
         query.andWhere('doctor.telefone_fixo ILIKE :telefone_fixo', {
-          telefone_fixo: `%${queryDto.telefone_fixo}%`,
+          telefone_fixo: `%${findDoctorDto.telefone_fixo}%`,
         });
       } else {
         query.where('doctor.telefone_fixo ILIKE :telefone_fixo', {
-          telefone_fixo: `%${queryDto.telefone_fixo}%`,
+          telefone_fixo: `%${findDoctorDto.telefone_fixo}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.telefone_celular) {
+    if (findDoctorDto.telefone_celular) {
       if (flag) {
         query.andWhere('doctor.crm ILIKE :telefone_celular', {
-          telefone_celular: `%${queryDto.telefone_celular}%`,
+          telefone_celular: `%${findDoctorDto.telefone_celular}%`,
         });
       } else {
         query.where('doctor.telefone_celular ILIKE :telefone_celular', {
-          telefone_celular: `%${queryDto.telefone_celular}%`,
+          telefone_celular: `%${findDoctorDto.telefone_celular}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.bairro) {
+    if (findDoctorDto.bairro) {
       if (flag) {
         query.andWhere('doctor.bairro ILIKE :bairro', {
-          bairro: `%${queryDto.bairro}%`,
+          bairro: `%${findDoctorDto.bairro}%`,
         });
       } else {
         query.where('doctor.bairro ILIKE :bairro', {
-          bairro: `%${queryDto.bairro}%`,
+          bairro: `%${findDoctorDto.bairro}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.cidade) {
+    if (findDoctorDto.cidade) {
       if (flag) {
         query.andWhere('doctor.cidade ILIKE :cidade', {
-          cidade: `%${queryDto.cidade}%`,
+          cidade: `%${findDoctorDto.cidade}%`,
         });
       } else {
         query.where('doctor.cidade ILIKE :cidade', {
-          cidade: `%${queryDto.cidade}%`,
+          cidade: `%${findDoctorDto.cidade}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.estado) {
+    if (findDoctorDto.estado) {
       if (flag) {
         query.andWhere('doctor.estado ILIKE :estado', {
-          estado: `%${queryDto.estado}%`,
+          estado: `%${findDoctorDto.estado}%`,
         });
       } else {
         query.where('doctor.estado ILIKE :estado', {
-          estado: `%${queryDto.estado}%`,
+          estado: `%${findDoctorDto.estado}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.logradouro) {
+    if (findDoctorDto.logradouro) {
       if (flag) {
         query.andWhere('doctor.logradouro ILIKE :logradouro', {
-          logradouro: `%${queryDto.logradouro}%`,
+          logradouro: `%${findDoctorDto.logradouro}%`,
         });
       } else {
         query.where('doctor.logradouro ILIKE :logradouro', {
-          crlogradourom: `%${queryDto.logradouro}%`,
+          crlogradourom: `%${findDoctorDto.logradouro}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.complemento) {
+    if (findDoctorDto.complemento) {
       if (flag) {
         query.andWhere('doctor.complemento ILIKE :complemento', {
-          complemento: `%${queryDto.complemento}%`,
+          complemento: `%${findDoctorDto.complemento}%`,
         });
       } else {
         query.where('doctor.complemento ILIKE :complemento', {
-          complemento: `%${queryDto.complemento}%`,
+          complemento: `%${findDoctorDto.complemento}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.ddd) {
+    if (findDoctorDto.ddd) {
       if (flag) {
-        query.andWhere('doctor.ddd ILIKE :ddd', { ddd: `%${queryDto.ddd}%` });
+        query.andWhere('doctor.ddd ILIKE :ddd', {
+          ddd: `%${findDoctorDto.ddd}%`,
+        });
       } else {
-        query.where('doctor.ddd ILIKE :ddd', { ddd: `%${queryDto.ddd}%` });
+        query.where('doctor.ddd ILIKE :ddd', { ddd: `%${findDoctorDto.ddd}%` });
         flag = true;
       }
     }
-    if (queryDto.ibge) {
+    if (findDoctorDto.ibge) {
       if (flag) {
         query.andWhere('doctor.ibge ILIKE :ibge', {
-          ibge: `%${queryDto.ibge}%`,
+          ibge: `%${findDoctorDto.ibge}%`,
         });
       } else {
-        query.where('doctor.ibge ILIKE :ibge', { ibge: `%${queryDto.ibge}%` });
+        query.where('doctor.ibge ILIKE :ibge', {
+          ibge: `%${findDoctorDto.ibge}%`,
+        });
         flag = true;
       }
     }
-    if (queryDto.gia) {
+    if (findDoctorDto.gia) {
       if (flag) {
-        query.andWhere('doctor.gia ILIKE :gia', { gia: `%${queryDto.gia}%` });
+        query.andWhere('doctor.gia ILIKE :gia', {
+          gia: `%${findDoctorDto.gia}%`,
+        });
       } else {
-        query.where('doctor.gia ILIKE :gia', { gia: `%${queryDto.gia}%` });
+        query.where('doctor.gia ILIKE :gia', { gia: `%${findDoctorDto.gia}%` });
         flag = true;
       }
     }
-    if (queryDto.siafi) {
+    if (findDoctorDto.siafi) {
       if (flag) {
         query.andWhere('doctor.siafi ILIKE :siafi', {
-          siafi: `%${queryDto.siafi}%`,
+          siafi: `%${findDoctorDto.siafi}%`,
         });
       } else {
         query.where('doctor.siafi ILIKE :siafi', {
-          siafi: `%${queryDto.siafi}%`,
+          siafi: `%${findDoctorDto.siafi}%`,
         });
         flag = true;
       }
     }
-    if (queryDto.especialidades) {
+    if (findDoctorDto.especialidades) {
       const listSpecialties = [];
 
       try {
-        queryDto.especialidades.forEach((element) => {
+        findDoctorDto.especialidades.forEach((element) => {
           listSpecialties.push('%' + element + '%');
         });
       } catch (error) {
-        listSpecialties.push('%' + queryDto.especialidades + '%');
+        listSpecialties.push('%' + findDoctorDto.especialidades + '%');
       }
 
       if (flag) {
@@ -262,7 +286,5 @@ export class DoctorRepository extends Repository<Doctor> {
         flag = true;
       }
     }
-
-    return await query.getMany();
   }
 }

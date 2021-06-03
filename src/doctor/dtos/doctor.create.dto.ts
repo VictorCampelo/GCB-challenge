@@ -9,48 +9,50 @@ import {
 
 export class CreateDoctorDto {
   @IsNotEmpty({
-    message: 'Por favor, adicione o nome do médico.',
+    message: 'Please add the name of the doctor.',
   })
   @MaxLength(120, {
-    message: 'O nome do médico deve conter até 120 caracteres',
+    message: "The doctor's name must be up to 120 characters",
   })
   nome: string;
 
+  @IsNumberString({ no_symbols: true })
   @IsNotEmpty({
-    message: 'Por favor, adicione o CRM do médico.',
+    message: "Please add the doctor's CRM.",
   })
   @MaxLength(7, {
-    message: 'O CRM do médico deve conter até 7 caracteres',
+    message: "The doctor's CRM must contain up to 7 characters",
   })
   crm: string;
 
   @IsNumberString({ no_symbols: true })
   @IsNotEmpty({
-    message: 'Por favor, adicione o número fixo do médico.',
+    message: "Please add the doctor's landline number.",
   })
   @MaxLength(13, {
-    message: 'O número fixo do médico deve conter até 13 dígitos',
+    message: "The doctor's fixed number must contain up to 13 digits",
   })
   telefone_fixo: string;
 
   @IsOptional()
   @IsNumberString({ no_symbols: true })
   @MaxLength(13, {
-    message: 'O número do celular do médico deve conter até 13 dígitos',
+    message:
+      'The mobile phone number of the doctor must contain up to 13 digits',
   })
   telefone_celular: string;
 
   @IsNumberString({ no_symbols: true })
   @IsNotEmpty({
-    message: 'Por favor, adicione o CEP do médico.',
+    message: "Please add the doctor's CEP code.",
   })
   @MaxLength(8, {
-    message: 'O CEP do médico deve conter até 8 dígitos',
+    message: "The doctor's CEP code must contain up to 8 digits",
   })
   cep: string;
 
   @IsNotEmpty({
-    message: 'Por favor, adicione as especialidades do médico.',
+    message: "Please add the doctor's specialties.",
   })
   @IsArray()
   @ArrayMinSize(2)
