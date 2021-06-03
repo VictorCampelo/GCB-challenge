@@ -1,3 +1,4 @@
+import { options } from '@hapi/joi';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Specialty } from 'src/specialty/specialty.entity';
@@ -44,7 +45,7 @@ export class DoctorService {
    * @returns doctor
    */
   async findDoctor(id: string): Promise<Doctor> {
-    return this.doctorRepository.findOne(id);
+    return this.doctorRepository.findOne(id, { relations: ['specialty'] });
   }
 
   /**
