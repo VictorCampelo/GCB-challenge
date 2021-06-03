@@ -20,7 +20,7 @@
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/VictorCampelo/GCB-challenge">
   </a>
     
-   <img alt="License" src="https://img.shields.io/badge/license-GNU-brightgreen">
+   <img alt="License" src="https://img.shields.io/badge/license-GPL3-brightgreen">
  
 </p>
 
