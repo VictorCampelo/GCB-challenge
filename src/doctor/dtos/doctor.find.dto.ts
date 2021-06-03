@@ -5,6 +5,7 @@ export class FindDoctorDto {
 
   nome?: string;
 
+  @IsNumberString({ no_symbols: true })
   crm?: string;
 
   @IsNumberString({ no_symbols: true })

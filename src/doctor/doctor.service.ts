@@ -1,4 +1,9 @@
-import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpService,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Specialty } from 'src/specialty/specialty.entity';
 import { Doctor } from './doctor.entity';
@@ -61,7 +66,7 @@ export class DoctorService {
    * @param updateDoctorDto
    * @returns updated doctor
    */
-  async update(id: string, updateDoctorDto: UpdateDoctorDto) {
+  async update(id: string, updateDoctorDto: UpdateDoctorDto): Promise<Doctor> {
     if (updateDoctorDto.cep) {
       const address = await this.getLocationByCep(updateDoctorDto.cep);
 
@@ -87,7 +92,11 @@ export class DoctorService {
       updateDoctorDto.ddd = ddd;
       updateDoctorDto.siafi = siafi;
 
-      return this.doctorRepository.update(id, updateDoctorDto);
+      await this.doctorRepository.update(id, updateDoctorDto);
+
+      return await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
     }
   }
 
@@ -110,10 +119,13 @@ export class DoctorService {
    * @param id
    * @returns message
    */
-  async restore(id: string): Promise<{ message: string }> {
+  async restore(id: string): Promise<{ message: string; doctor: Doctor }> {
     try {
       await this.doctorRepository.restore(id);
-      return { message: 'successfully restored' };
+      const doctor = await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
+      return { message: 'successfully restored', doctor };
     } catch (error) {
       throw new NotFoundException(`Doctor not found. Details: ${error}`);
     }
@@ -128,7 +140,7 @@ export class DoctorService {
   async addSpecialties(
     id: string,
     specialties: Specialty[],
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; doctor: Doctor }> {
     let doctor;
     try {
       doctor = await this.doctorRepository.findOne(id, {
@@ -141,9 +153,15 @@ export class DoctorService {
       doctor.especialidades.push(element);
     });
 
-    doctor.save();
-
-    return { message: 'successfully added new specialties' };
+    try {
+      doctor.save();
+      doctor = await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
+      return { message: 'successfully added new specialties', doctor };
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   /**
@@ -152,16 +170,10 @@ export class DoctorService {
    * @param specialties
    * @returns message
    */
-  async removeSpecialties(id: string, specialties: Specialty[]) {
-    // let specialtyList;
-    // try {
-    //   specialtyList = await this.specialtyRepository
-    //     .createQueryBuilder('specialty')
-    //     .where('specialty.nome IN (:...names)', { names: specialties })
-    //     .getMany();
-    // } catch (error) {
-    //   throw new NotFoundException(`Specialties not found. Details: ${error}`);
-    // }
+  async removeSpecialties(
+    id: string,
+    specialties: Specialty[],
+  ): Promise<{ message: string; doctor: Doctor }> {
     let doctor;
     try {
       doctor = await this.doctorRepository.findOne(id, {
@@ -176,9 +188,15 @@ export class DoctorService {
       });
     });
 
-    doctor.save();
-
-    return { message: 'successfully removed specialties' };
+    try {
+      doctor.save();
+      doctor = await this.doctorRepository.findOne(id, {
+        relations: ['especialidades'],
+      });
+      return { message: 'successfully removed specialties', doctor };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   /**
