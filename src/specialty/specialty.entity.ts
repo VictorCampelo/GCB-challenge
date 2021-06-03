@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   Unique,
@@ -26,4 +27,8 @@ export class Specialty extends BaseEntity {
   @UpdateDateColumn()
   @Exclude({ toPlainOnly: true })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @Exclude({ toPlainOnly: true })
+  deletedAt?: Date;
 }

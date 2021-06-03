@@ -21,7 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             migrationsDir: __dirname + '/migration/',
           },
           migrationsRun: true,
-          synchronize: true,
+          synchronize: configService.get('NODE_ENV') === 'dev' ? true : false,
         };
       },
     }),

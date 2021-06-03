@@ -69,7 +69,7 @@ export class SpecialtyController {
    */
   @Delete('/delete/:id')
   @HttpCode(200)
-  async deleteSpecialty(@Param('id') id: string): Promise<string> {
+  async deleteSpecialty(@Param('id') id: string): Promise<{ message: string }> {
     return await this.specialtyService.delete(id);
   }
 }

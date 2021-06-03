@@ -241,19 +241,26 @@ export class DoctorRepository extends Repository<Doctor> {
       }
     }
     if (queryDto.especialidades) {
-      console.log(queryDto.especialidades);
-      queryDto.especialidades.forEach((element) => {
-        if (flag) {
-          query.andWhere('especialidade.nome ILIKE :nome', {
-            nome: `%${element}%`,
-          });
-        } else {
-          query.where('especialidade.nome ILIKE :nome', {
-            nome: `%${element}%`,
-          });
-          flag = true;
-        }
-      });
+      const listSpecialties = [];
+
+      try {
+        queryDto.especialidades.forEach((element) => {
+          listSpecialties.push('%' + element + '%');
+        });
+      } catch (error) {
+        listSpecialties.push('%' + queryDto.especialidades + '%');
+      }
+
+      if (flag) {
+        query.andWhere('especialidade.nome ILIKE ANY(ARRAY[:...nomes])', {
+          nomes: listSpecialties,
+        });
+      } else {
+        query.where('especialidade.nome ILIKE ANY (ARRAY[:...nomes])', {
+          nomes: listSpecialties,
+        });
+        flag = true;
+      }
     }
 
     return await query.getMany();

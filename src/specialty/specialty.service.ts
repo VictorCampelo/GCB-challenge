@@ -83,10 +83,10 @@ export class SpecialtyService {
     }
   }
 
-  async delete(id: string): Promise<string> {
+  async delete(id: string): Promise<{ message: string }> {
     const result = await this.specialtyRepository.softDelete(id);
     if (result.affected > 0) {
-      return 'Especialidade Removida temporariamente';
+      return { message: 'Especialidade Removida temporariamente' };
     } else {
       throw new NotFoundException('Usuário não encontrado');
     }
