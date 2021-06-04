@@ -48,7 +48,7 @@ export class DoctorService {
    * @returns doctor
    */
   async findDoctor(id: string): Promise<Doctor> {
-    return this.doctorRepository.findOne(id, { relations: ['specialty'] });
+    return this.doctorRepository.findOne(id, { relations: ['especialidades'] });
   }
 
   /**
@@ -107,6 +107,9 @@ export class DoctorService {
    */
   async delete(id: string): Promise<{ message: string }> {
     try {
+      // const doctor = await this.doctorRepository.findOne(id);
+      // doctor.deletedAt = new Date();
+      // await doctor.save();
       await this.doctorRepository.softDelete(id);
       return { message: 'successfully deleted' };
     } catch (error) {
@@ -154,7 +157,7 @@ export class DoctorService {
     });
 
     try {
-      doctor.save();
+      await doctor.save();
       doctor = await this.doctorRepository.findOne(id, {
         relations: ['especialidades'],
       });
@@ -189,7 +192,7 @@ export class DoctorService {
     });
 
     try {
-      doctor.save();
+      await doctor.save();
       doctor = await this.doctorRepository.findOne(id, {
         relations: ['especialidades'],
       });

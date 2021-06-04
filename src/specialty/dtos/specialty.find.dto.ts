@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, MaxLength } from 'class-validator';
+import { ArrayMinSize, IsArray, IsNotEmpty } from 'class-validator';
 
 export class FindSpecialtyDto {
   @IsNotEmpty({
