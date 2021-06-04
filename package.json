@@ -1,10 +1,10 @@
 {
-  "name": "DevMagic",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "name": "gcb-challenge",
+  "version": "1.0.0",
+  "description": "A Restful API that manages medical records. 🏥",
+  "author": "Victor Campelo",
+  "private": false,
+  "license": "GPL-3.0 License",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
